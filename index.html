@@ -4,15 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Калькулятор валют</title>
-    <!-- Подключение Font Awesome -->
+    <!-- Подключаем Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
     <style>
         body {
             font-family: 'Arial', sans-serif;
             margin: 0;
             padding: 0;
-            background: linear-gradient(135deg, #cfd9df, #e2ebf0);
-            color: #333;
+            background: linear-gradient(135deg, #000000, #1a1a1a);
+            color: #ffffff;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -22,42 +23,36 @@
         .container {
             width: 100%;
             max-width: 400px;
-            background: #fff;
+            background: #1e1e1e;
             border-radius: 16px;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.8);
             padding: 20px;
             text-align: center;
         }
 
         h1 {
-            font-size: 26px;
+            font-size: 24px;
             margin-bottom: 20px;
-            color: #444;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        h1 .icon {
-            margin-right: 10px;
-            color: #007bff;
+            color: #ffffff;
         }
 
         label {
             font-size: 16px;
             margin: 10px 0;
             display: block;
-            color: #555;
+            color: #cccccc;
         }
 
         input, select {
             width: 100%;
-            padding: 10px;
+            padding: 12px;
             margin: 10px 0;
             font-size: 16px;
-            border: 1px solid #ccc;
+            border: 1px solid #444444;
             border-radius: 8px;
             outline: none;
+            background-color: #2a2a2a;
+            color: #ffffff;
         }
 
         .swap-button {
@@ -99,13 +94,6 @@
             font-weight: bold;
             transition: 0.3s;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        button.convert-btn i {
-            margin-right: 8px;
         }
 
         button.convert-btn:hover {
@@ -115,38 +103,56 @@
         #result {
             font-size: 18px;
             margin-top: 20px;
-            color: #007bff;
+            color: #00d4ff;
             font-weight: bold;
+        }
+
+        .icon {
+            font-size: 20px;
+            margin-right: 8px;
+            color: #007bff;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1><i class="fas fa-exchange-alt icon"></i>Калькулятор валют</h1>
-        <label for="amount"><i class="fas fa-money-bill-wave"></i> Сумма:</label>
+        <h1>Калькулятор валют</h1>
+        <label for="amount"><i class="fas fa-money-bill-wave icon"></i>Сумма:</label>
         <input type="number" id="amount" placeholder="Введите сумму">
 
-        <label for="fromCurrency"><i class="fas fa-arrow-circle-up"></i> Из валюты:</label>
+        <label for="fromCurrency"><i class="fas fa-arrow-alt-circle-left icon"></i>Из валюты:</label>
         <select id="fromCurrency">
-            <option value="USD">Доллар США (USD)</option>
-            <option value="RUB">Российский рубль (RUB)</option>
-            <option value="TJS">Таджикский сомони (TJS)</option>
+            <option value="USD">🇺🇸 Доллар США (USD)</option>
+            <option value="RUB">🇷🇺 Российский рубль (RUB)</option>
+            <option value="TJS">🇹🇯 Таджикский сомони (TJS)</option>
+            <option value="EUR">🇪🇺 Евро (EUR)</option>
+            <option value="GBP">🇬🇧 Британский фунт (GBP)</option>
+            <option value="JPY">🇯🇵 Японская йена (JPY)</option>
+            <option value="CNY">🇨🇳 Китайский юань (CNY)</option>
+            <option value="AUD">🇦🇺 Австралийский доллар (AUD)</option>
+            <option value="CAD">🇨🇦 Канадский доллар (CAD)</option>
         </select>
 
         <div class="swap-button">
-            <button onclick="swapCurrencies()"><i class="fas fa-sync-alt"></i></button>
+            <button onclick="swapCurrencies()">
+                <i class="fas fa-exchange-alt"></i>
+            </button>
         </div>
 
-        <label for="toCurrency"><i class="fas fa-arrow-circle-down"></i> В валюту:</label>
+        <label for="toCurrency"><i class="fas fa-arrow-alt-circle-right icon"></i>В валюту:</label>
         <select id="toCurrency">
-            <option value="USD">Доллар США (USD)</option>
-            <option value="RUB">Российский рубль (RUB)</option>
-            <option value="TJS">Таджикский сомони (TJS)</option>
+            <option value="USD">🇺🇸 Доллар США (USD)</option>
+            <option value="RUB">🇷🇺 Российский рубль (RUB)</option>
+            <option value="TJS">🇹🇯 Таджикский сомони (TJS)</option>
+            <option value="EUR">🇪🇺 Евро (EUR)</option>
+            <option value="GBP">🇬🇧 Британский фунт (GBP)</option>
+            <option value="JPY">🇯🇵 Японская йена (JPY)</option>
+            <option value="CNY">🇨🇳 Китайский юань (CNY)</option>
+            <option value="AUD">🇦🇺 Австралийский доллар (AUD)</option>
+            <option value="CAD">🇨🇦 Канадский доллар (CAD)</option>
         </select>
 
-        <button class="convert-btn" onclick="convertCurrency()">
-            <i class="fas fa-calculator"></i> Конвертировать
-        </button>
+        <button class="convert-btn" onclick="convertCurrency()">Конвертировать <i class="fas fa-sync-alt"></i></button>
 
         <p id="result"></p>
     </div>
@@ -163,19 +169,14 @@
                 if (!response.ok) throw new Error("Ошибка загрузки данных");
                 const data = await response.json();
 
-                // Установим курсы валют
-                exchangeRates = {
-                    USD: 1,
-                    RUB: data.rates.RUB, // Российский рубль
-                    TJS: 11.3 // Примерный курс сомони
-                };
+                exchangeRates = data.rates;
+                exchangeRates["TJS"] = 11.3; // Примерный курс сомони
             } catch (error) {
                 console.error("Ошибка:", error);
                 alert("Не удалось загрузить курсы валют. Попробуйте позже.");
             }
         }
 
-        // Конвертация валют
         function convertCurrency() {
             const amount = parseFloat(document.getElementById("amount").value);
             const fromCurrency = document.getElementById("fromCurrency").value;
@@ -186,28 +187,22 @@
                 return;
             }
 
-            // Расчет курса
             const fromRate = exchangeRates[fromCurrency];
             const toRate = exchangeRates[toCurrency];
             const convertedAmount = (amount / fromRate) * toRate;
 
-            // Вывод результата
             document.getElementById("result").innerText =
                 `${amount} ${fromCurrency} = ${convertedAmount.toFixed(2)} ${toCurrency}`;
         }
 
-        // Замена валют местами
         function swapCurrencies() {
             const fromCurrency = document.getElementById("fromCurrency");
             const toCurrency = document.getElementById("toCurrency");
-
-            // Меняем значения местами
             const temp = fromCurrency.value;
             fromCurrency.value = toCurrency.value;
             toCurrency.value = temp;
         }
 
-        // Загружаем курсы при загрузке страницы
         window.onload = loadRates;
     </script>
 </body>
