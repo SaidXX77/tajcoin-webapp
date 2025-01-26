@@ -6,45 +6,106 @@
     <title>Калькулятор валют</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Arial', sans-serif;
             margin: 0;
-            padding: 20px;
-            background-color: #f9f9f9;
-        }
-        h1 {
-            text-align: center;
+            padding: 0;
+            background: linear-gradient(135deg, #cfd9df, #e2ebf0);
             color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
         }
-        .converter {
-            max-width: 400px;
-            margin: 20px auto;
-            padding: 20px;
-            background: white;
-            border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-        .converter label, .converter select, .converter input, .converter button {
-            display: block;
+
+        .container {
             width: 100%;
-            margin: 10px 0;
-            padding: 10px;
-            font-size: 16px;
+            max-width: 400px;
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            text-align: center;
         }
-        button {
-            background-color: #4caf50;
+
+        h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #444;
+        }
+
+        label {
+            font-size: 16px;
+            margin: 10px 0;
+            display: block;
+            color: #555;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            outline: none;
+        }
+
+        .swap-button {
+            display: flex;
+            justify-content: center;
+            margin: 15px 0;
+        }
+
+        .swap-button button {
+            background-color: #007bff;
             color: white;
             border: none;
             cursor: pointer;
-            border-radius: 5px;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            font-size: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: 0.3s;
         }
-        button:hover {
-            background-color: #45a049;
+
+        .swap-button button:hover {
+            background-color: #0056b3;
+            transform: scale(1.1);
+        }
+
+        button.convert-btn {
+            width: 100%;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            padding: 12px;
+            font-size: 16px;
+            font-weight: bold;
+            transition: 0.3s;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        button.convert-btn:hover {
+            background-color: #218838;
+        }
+
+        #result {
+            font-size: 18px;
+            margin-top: 20px;
+            color: #007bff;
+            font-weight: bold;
         }
     </style>
 </head>
 <body>
-    <h1>Калькулятор валют</h1>
-    <div class="converter">
+    <div class="container">
+        <h1>Калькулятор валют</h1>
         <label for="amount">Сумма:</label>
         <input type="number" id="amount" placeholder="Введите сумму">
 
@@ -55,6 +116,10 @@
             <option value="TJS">Таджикский сомони (TJS)</option>
         </select>
 
+        <div class="swap-button">
+            <button onclick="swapCurrencies()">↔️</button>
+        </div>
+
         <label for="toCurrency">В валюту:</label>
         <select id="toCurrency">
             <option value="USD">Доллар США (USD)</option>
@@ -62,7 +127,7 @@
             <option value="TJS">Таджикский сомони (TJS)</option>
         </select>
 
-        <button onclick="convertCurrency()">Конвертировать</button>
+        <button class="convert-btn" onclick="convertCurrency()">Конвертировать</button>
 
         <p id="result"></p>
     </div>
@@ -79,11 +144,11 @@
                 if (!response.ok) throw new Error("Ошибка загрузки данных");
                 const data = await response.json();
 
-                // Курс валют по отношению к доллару США
+                // Установим курсы валют
                 exchangeRates = {
                     USD: 1,
                     RUB: data.rates.RUB, // Российский рубль
-                    TJS: 11.3 // Примерный курс сомони, можно заменить на актуальный
+                    TJS: 11.3 // Примерный курс сомони
                 };
             } catch (error) {
                 console.error("Ошибка:", error);
@@ -110,6 +175,17 @@
             // Вывод результата
             document.getElementById("result").innerText =
                 `${amount} ${fromCurrency} = ${convertedAmount.toFixed(2)} ${toCurrency}`;
+        }
+
+        // Замена валют местами
+        function swapCurrencies() {
+            const fromCurrency = document.getElementById("fromCurrency");
+            const toCurrency = document.getElementById("toCurrency");
+
+            // Меняем значения местами
+            const temp = fromCurrency.value;
+            fromCurrency.value = toCurrency.value;
+            toCurrency.value = temp;
         }
 
         // Загружаем курсы при загрузке страницы
