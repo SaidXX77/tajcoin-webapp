@@ -1,10 +1,119 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>TAJ-Coin WebApp</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Калькулятор валют</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        .converter {
+            max-width: 400px;
+            margin: 20px auto;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .converter label, .converter select, .converter input, .converter button {
+            display: block;
+            width: 100%;
+            margin: 10px 0;
+            padding: 10px;
+            font-size: 16px;
+        }
+        button {
+            background-color: #4caf50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
 </head>
 <body>
-    <h1>Добро пожаловать в TAJ-Coin!</h1>
-    <p>Ваш заработок начинается здесь 🚀</p>
+    <h1>Калькулятор валют</h1>
+    <div class="converter">
+        <label for="amount">Сумма:</label>
+        <input type="number" id="amount" placeholder="Введите сумму">
+
+        <label for="fromCurrency">Из валюты:</label>
+        <select id="fromCurrency">
+            <option value="USD">Доллар США (USD)</option>
+            <option value="RUB">Российский рубль (RUB)</option>
+            <option value="TJS">Таджикский сомони (TJS)</option>
+        </select>
+
+        <label for="toCurrency">В валюту:</label>
+        <select id="toCurrency">
+            <option value="USD">Доллар США (USD)</option>
+            <option value="RUB">Российский рубль (RUB)</option>
+            <option value="TJS">Таджикский сомони (TJS)</option>
+        </select>
+
+        <button onclick="convertCurrency()">Конвертировать</button>
+
+        <p id="result"></p>
+    </div>
+
+    <script>
+        const API_URL = "https://api.exchangerate-api.com/v4/latest/USD";
+
+        let exchangeRates = {};
+
+        // Загружаем курсы валют
+        async function loadRates() {
+            try {
+                const response = await fetch(API_URL);
+                if (!response.ok) throw new Error("Ошибка загрузки данных");
+                const data = await response.json();
+
+                // Курс валют по отношению к доллару США
+                exchangeRates = {
+                    USD: 1,
+                    RUB: data.rates.RUB, // Российский рубль
+                    TJS: 11.3 // Примерный курс сомони, можно заменить на актуальный
+                };
+            } catch (error) {
+                console.error("Ошибка:", error);
+                alert("Не удалось загрузить курсы валют. Попробуйте позже.");
+            }
+        }
+
+        // Конвертация валют
+        function convertCurrency() {
+            const amount = parseFloat(document.getElementById("amount").value);
+            const fromCurrency = document.getElementById("fromCurrency").value;
+            const toCurrency = document.getElementById("toCurrency").value;
+
+            if (isNaN(amount) || amount <= 0) {
+                alert("Введите корректную сумму!");
+                return;
+            }
+
+            // Расчет курса
+            const fromRate = exchangeRates[fromCurrency];
+            const toRate = exchangeRates[toCurrency];
+            const convertedAmount = (amount / fromRate) * toRate;
+
+            // Вывод результата
+            document.getElementById("result").innerText =
+                `${amount} ${fromCurrency} = ${convertedAmount.toFixed(2)} ${toCurrency}`;
+        }
+
+        // Загружаем курсы при загрузке страницы
+        window.onload = loadRates;
+    </script>
 </body>
 </html>
